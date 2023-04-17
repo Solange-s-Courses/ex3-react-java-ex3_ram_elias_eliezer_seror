@@ -40,44 +40,42 @@ const GameBoard = () => {
     function handleInputChange(e, index) {
         console.log("in input change")
         const newGuess = [...guess];
-        newGuess[index] = parseInt(e.target.value);
+        newGuess[index] = e.target.value;
         setGuess(newGuess);
         setError(false);
         setMessage('');
     }
 
     function checkGuess() {
-        guess.forEach(digit => {
-            if (digit === '') {
+        for (let i = 0; i < guess.length; i++) {
+            if (guess[i] === '') {
                 setError(true);
                 setMessage('Guess must contain 4 digits.');
-            }
-        })
-
-        if (!error) { //check why it doesnt work!!
-            const currentGuess = guess.join('');
-            let bulls = 0;
-            let cows = 0;
-            for (let i = 0; i < currentGuess.length; i++) {
-                if (currentGuess[i] === solution[i]) {
-                    bulls++;
-                } else if (solution.includes(currentGuess[i])) {
-                    cows++;
-                }
-            }
-
-            setHistory([
-                {guess: currentGuess, bulls: bulls, cows: cows},
-                ...history,
-            ]);
-
-            if (bulls === 4) {
-                setSolution(generateSolution());
-                // End game logic goes here
-                console.log('You won!');
+                return;
             }
         }
+
+        const currentGuess = guess.join('');
+        let bulls = 0;
+        let cows = 0;
+        for (let i = 0; i < currentGuess.length; i++) {
+            if (currentGuess[i] === solution[i]) {
+                bulls++;
+            } else if (solution.includes(currentGuess[i])) {
+                cows++;
+            }
+        }
+
+        setHistory([
+            {guess: currentGuess, bulls: bulls, cows: cows}, ...history,]);
+
+        if (bulls === 4) {
+            setSolution(generateSolution());
+            // End game logic goes here
+            console.log('You won!');
+        }
     }
+
 
     return (
         <div className="container">
@@ -87,12 +85,12 @@ const GameBoard = () => {
                          alt="Example image"/>
                 </div>
                 <div className="row ">
-                <div className="col-sm-6 mb-3">
-                    <button className="btn btn-primary" onClick={handleNewGame}> New Game</button>
-                </div>
-                <div className="col-sm-6 mb-3">
-                    <button className="btn btn-primary" onClick={handleGameRules}> Game rules</button>
-                </div>
+                    <div className="col-sm-6 mb-3">
+                        <button className="btn btn-primary" onClick={handleNewGame}> New Game</button>
+                    </div>
+                    <div className="col-sm-6 mb-3">
+                        <button className="btn btn-primary" onClick={handleGameRules}> Game rules</button>
+                    </div>
                     <div className="col mb-3">
                         <Guess guess={guess}
                                handleInputChange={handleInputChange}
@@ -103,9 +101,9 @@ const GameBoard = () => {
                         <button className="btn btn-primary" onClick={checkGuess}> Guess</button>
                     </div>
 
-                <div className="col-md-6">
-                    <History history={history}/>
-                </div>
+                    <div className="col-md-6">
+                        <History history={history}/>
+                    </div>
                 </div>
             </div>
         </div>
