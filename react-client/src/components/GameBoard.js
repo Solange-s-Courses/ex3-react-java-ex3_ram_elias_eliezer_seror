@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-
+import GameOver from './GameOver';
 import Guess from './Guess';
 import History from './History';
 
@@ -9,6 +9,7 @@ const GameBoard = () => {
     const [history, setHistory] = useState([]);
     const [message, setMessage] = useState('');
     const [error, setError] = useState(false);
+    const [gameOver, setGameOver] = useState(false);
 
     useEffect(() => {
         setSolution(generateSolution());
@@ -31,6 +32,7 @@ const GameBoard = () => {
         setHistory([]);
         setMessage('');
         setError(false);
+        setGameOver(false);
     }
 
     function handleGameRules() {
@@ -71,14 +73,16 @@ const GameBoard = () => {
 
         if (bulls === 4) {
             setSolution(generateSolution());
-            // End game logic goes here
+            setGameOver(true);
             console.log('You won!');
         }
     }
 
-
     return (
         <div className="container">
+            {gameOver ?
+                <GameOver score={history.length} />
+                :
             <div className="row">
                 <div className="col-md-6 mb-3">
                     <img src="https://cdn.akamai.steamstatic.com/steam/apps/2078210/capsule_616x353.jpg?t=1665514818"
@@ -106,8 +110,8 @@ const GameBoard = () => {
                     </div>
                 </div>
             </div>
+            }
         </div>
-
     );
 };
 
