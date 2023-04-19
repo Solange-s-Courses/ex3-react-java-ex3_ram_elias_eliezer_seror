@@ -10,6 +10,9 @@ const GameBoard = () => {
     const [message, setMessage] = useState('');
     const [error, setError] = useState(false);
     const [gameOver, setGameOver] = useState(false);
+    const [rules, setRules] = useState(false);
+    const rulesMsg = 'The goal of the game is to guess a 4-digit number combination. The digits can be in any order and repeat For each guess, you will receive feedback in the form of "bulls" and "cows". A "bull" indicates that a digit in your guess is in the correct position, while a "cow" indicates that a digit in your guess is in the wrong position. Use the feedback to refine your guesses and eventually guess the correct combination.'
+
 
     useEffect(() => {
         setSolution(generateSolution());
@@ -36,7 +39,7 @@ const GameBoard = () => {
     }
 
     function handleGameRules() {
-        setMessage('The objective of the game is to guess a 4-digit number/color combination. Each digit in the combination is unique and the digits can be in any order. For each guess, you will receive feedback in the form of "bulls" and "cows". A "bull" indicates that a digit in your guess is in the correct position, while a "cow" indicates that a digit in your guess is in the wrong position. Use the feedback to refine your guesses and eventually guess the correct combination.');
+        setRules(!rules)
     }
 
     function handleInputChange(e, index) {
@@ -95,6 +98,7 @@ const GameBoard = () => {
                     <div className="col-sm-6 mb-3">
                         <button className="btn btn-primary" onClick={handleGameRules}> Game rules</button>
                     </div>
+                    {rules && <div className="text-success mb-3">{rulesMsg}</div>}
                     <div className="col mb-3">
                         <Guess guess={guess}
                                handleInputChange={handleInputChange}
