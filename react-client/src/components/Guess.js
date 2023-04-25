@@ -24,7 +24,7 @@ const Guess = ({guess, handleInputChange, error, message}) => {
                     </select>
                 ))}
             </div>
-            {error && <div className="text-danger">{message}</div>}
+            {error && <div className="text-white text-center bg-danger">{message}</div>}
         </div>
     );
 };

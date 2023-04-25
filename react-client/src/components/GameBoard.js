@@ -23,10 +23,9 @@ const GameBoard = () => {
         const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         let result = '';
         let digit;
-        while (result.length < 4)
-        {
+        while (result.length < 4) {
             digit = digits[Math.floor(Math.random() * digits.length)];
-            if (!result.includes(digit)){
+            if (!result.includes(digit)) {
                 result += digit
             }
         }
@@ -48,15 +47,32 @@ const GameBoard = () => {
         setRules(!rules)
     }
 
+    //
+    // function handleInputChange(e, index) {
+    //     const newGuess = [...guess];
+    //     newGuess[index] = e.target.value;
+    //     setGuess(newGuess);
+    //     setError(false);
+    //     setMessage('');
+    // }
     function handleInputChange(e, index) {
         const newGuess = [...guess];
-        newGuess[index] = e.target.value;
+        const digit = e.target.value;
+
+        if (newGuess.includes(digit)) {
+            setError(true);
+            setMessage(`You already used ${digit}`);
+        } else {
+            newGuess[index] = digit;
+            setError(false);
+            setMessage('');
+        }
+
         setGuess(newGuess);
-        setError(false);
-        setMessage('');
     }
 
     function checkGuess() {
+        setError(false)
         for (let i = 0; i < guess.length; i++) {
             if (guess[i] === '') {
                 setError(true);
@@ -89,36 +105,39 @@ const GameBoard = () => {
     return (
         <div className="container d-flex bg-info bg-opacity-25 justify-content-center">
             {gameOver ?
-                <GameOver score={history.length} />
+                <GameOver score={history.length}/>
                 :
-            <div className="row">
-                <div className="col d-flex justify-content-center mb-3">
-                    <img src="https://cdn.akamai.steamstatic.com/steam/apps/2078210/capsule_616x353.jpg?t=1665514818"
-                         alt="Example image"/>
-                </div>
-                <div className="row ">
-                    <div className="col-6 mb-3 d-flex justify-content-center">
-                        <button className="btn btn-success" onClick={handleNewGame}> New Game</button>
+                <div className="row">
+                    <div className="col d-flex justify-content-center mb-3">
+                        <img
+                            src="https://cdn.akamai.steamstatic.com/steam/apps/2078210/capsule_616x353.jpg?t=1665514818"
+                            alt="Example image"/>
                     </div>
-                    <div className="col-6 mb-3 d-flex justify-content-center">
-                        <button className="btn btn-warning" onClick={handleGameRules}> Game rules</button>
+                    <div className="row ">
+                        <div className="col-6 mb-3 d-flex justify-content-center">
+                            <button className="btn btn-success" onClick={handleNewGame}> New Game</button>
+                        </div>
+                        <div className="col-6 mb-3 d-flex justify-content-center">
+                            <button className="btn btn-warning" onClick={handleGameRules}> Game rules</button>
+                        </div>
+                        {rules && <div className="text-success mb-3">{rulesMsg}</div>}
+                    <div className="row d-flex justify-content-center ">
+                        <div className="col-9 mb-3">
+                            <Guess guess={guess}
+                                   handleInputChange={handleInputChange}
+                                   error={error}
+                                   message={message}/>
+                        </div>
                     </div>
-                    {rules && <div className="text-success mb-3">{rulesMsg}</div>}
-                    <div className="col mb-3">
-                        <Guess guess={guess}
-                               handleInputChange={handleInputChange}
-                               error={error}
-                               message={message}/>
-                    </div>
-                    <div className="col-sm-12 d-flex justify-content-center mb-3">
-                        <button className="btn btn-primary" onClick={checkGuess}> Go!</button>
-                    </div>
+                        <div className="col-sm-12 d-flex justify-content-center mb-3">
+                            <button className="btn btn-primary" onClick={checkGuess}> Go!</button>
+                        </div>
 
-                    <div className="col-md-12 d-flex justify-content-center">
-                        <History history={history}/>
+                        <div className="col-md-12 d-flex justify-content-center">
+                            <History history={history}/>
+                        </div>
                     </div>
                 </div>
-            </div>
             }
         </div>
     );
