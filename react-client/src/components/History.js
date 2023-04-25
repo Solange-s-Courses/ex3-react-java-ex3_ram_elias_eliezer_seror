@@ -2,26 +2,29 @@ import React from 'react';
 
 const History = ({ history }) => {
     return (
-        <div className="col-md-6">
-            <h2>History</h2>
-            <table className="table">
+        <div className="col mb-3">
+            <div className="card bg-info bg-opacity-50 p-3 mb-5">
+                <p className="card-text d-flex justify-content-center">Your history Guesses: </p>
+
+            <table className="table bg-white table-bordered border-dark table-striped-columns rounded">
                 <thead>
                 <tr>
-                    <th>Guess</th>
-                    <th>Bulls</th>
-                    <th>Cows</th>
+                    <th className="text-center">Guess</th>
+                    <th className="text-center">Bulls</th>
+                    <th className="text-center">Cows</th>
                 </tr>
                 </thead>
                 <tbody>
                 {history.map((item, index) => (
                     <tr key={index}>
-                        <td>{item.guess}</td>
-                        <td>{item.bulls}</td>
-                        <td>{item.cows}</td>
+                        <td className="text-center">{item.guess}</td>
+                        <td className="text-center">{item.bulls}</td>
+                        <td className="text-center">{item.cows}</td>
                     </tr>
                 ))}
                 </tbody>
             </table>
+        </div>
         </div>
     );
 };

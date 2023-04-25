@@ -11,7 +11,7 @@ const GameBoard = () => {
     const [error, setError] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [rules, setRules] = useState(false);
-    const rulesMsg = 'The goal of the game is to guess a 4-digit number combination. The digits can be in any order and repeat For each guess, you will receive feedback in the form of "bulls" and "cows". A "bull" indicates that a digit in your guess is in the correct position, while a "cow" indicates that a digit in your guess is in the wrong position. Use the feedback to refine your guesses and eventually guess the correct combination.'
+    const rulesMsg = 'The goal of the game is to guess a 4-digit number combination. The digits can be in any order and can not repeat For each guess, you will receive feedback in the form of "bulls" and "cows". A "bull" indicates that a digit in your guess is in the correct position, while a "cow" indicates that a digit in your guess is in the wrong position. Use the feedback to refine your guesses and eventually guess the correct combination.'
 
 
     useEffect(() => {
@@ -22,12 +22,18 @@ const GameBoard = () => {
         // Generate a 4-digit random number/color combination
         const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         let result = '';
-        for (let i = 0; i < 4; i++) {
-            result += digits[Math.floor(Math.random() * digits.length)];
+        let digit;
+        while (result.length < 4)
+        {
+            digit = digits[Math.floor(Math.random() * digits.length)];
+            if (!result.includes(digit)){
+                result += digit
+            }
         }
         console.log(result); // Print the solution in the console
         return result;
     }
+
 
     function handleNewGame() {
         setSolution(generateSolution());
@@ -43,7 +49,6 @@ const GameBoard = () => {
     }
 
     function handleInputChange(e, index) {
-        console.log("in input change")
         const newGuess = [...guess];
         newGuess[index] = e.target.value;
         setGuess(newGuess);
@@ -82,21 +87,21 @@ const GameBoard = () => {
     }
 
     return (
-        <div className="container">
+        <div className="container d-flex bg-info bg-opacity-25 justify-content-center">
             {gameOver ?
                 <GameOver score={history.length} />
                 :
             <div className="row">
-                <div className="col-md-6 mb-3">
+                <div className="col d-flex justify-content-center mb-3">
                     <img src="https://cdn.akamai.steamstatic.com/steam/apps/2078210/capsule_616x353.jpg?t=1665514818"
                          alt="Example image"/>
                 </div>
                 <div className="row ">
-                    <div className="col-sm-6 mb-3">
-                        <button className="btn btn-primary" onClick={handleNewGame}> New Game</button>
+                    <div className="col-6 mb-3 d-flex justify-content-center">
+                        <button className="btn btn-success" onClick={handleNewGame}> New Game</button>
                     </div>
-                    <div className="col-sm-6 mb-3">
-                        <button className="btn btn-primary" onClick={handleGameRules}> Game rules</button>
+                    <div className="col-6 mb-3 d-flex justify-content-center">
+                        <button className="btn btn-warning" onClick={handleGameRules}> Game rules</button>
                     </div>
                     {rules && <div className="text-success mb-3">{rulesMsg}</div>}
                     <div className="col mb-3">
@@ -105,11 +110,11 @@ const GameBoard = () => {
                                error={error}
                                message={message}/>
                     </div>
-                    <div className="col-sm-12">
-                        <button className="btn btn-primary" onClick={checkGuess}> Guess</button>
+                    <div className="col-sm-12 d-flex justify-content-center mb-3">
+                        <button className="btn btn-primary" onClick={checkGuess}> Go!</button>
                     </div>
 
-                    <div className="col-md-6">
+                    <div className="col-md-12 d-flex justify-content-center">
                         <History history={history}/>
                     </div>
                 </div>
