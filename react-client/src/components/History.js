@@ -2,9 +2,9 @@ import React from 'react';
 
 const History = ({ history }) => {
     return (
-        <div className="col mb-3">
+        <div className="col-9 mb-3">
             <div className="card bg-info bg-opacity-50 p-3 mb-5">
-                <p className="card-text d-flex justify-content-center">Your history Guesses: </p>
+                <p className="card-text d-flex justify-content-center">Your guesses history: </p>
 
             <table className="table bg-white table-bordered border-dark table-striped-columns rounded">
                 <thead>
