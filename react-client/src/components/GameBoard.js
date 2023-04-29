@@ -3,7 +3,8 @@ import GameOver from './GameOver';
 import Guess from './Guess';
 import History from './History';
 
-const GameBoard = () => {
+
+const GameBoard = ({ submitted }) => {
     const [solution, setSolution] = useState('');
     const [guess, setGuess] = useState(['', '', '', '']);
     const [history, setHistory] = useState([]);
@@ -30,9 +31,9 @@ const GameBoard = () => {
             }
         }
         console.log(result); // Print the solution in the console
-        return result;
+        //return result;
+        return "0000";
     }
-
 
     function handleNewGame() {
         setSolution(generateSolution());
@@ -41,20 +42,13 @@ const GameBoard = () => {
         setMessage('');
         setError(false);
         setGameOver(false);
+        submitted = false;
     }
 
     function handleGameRules() {
         setRules(!rules)
     }
 
-    //
-    // function handleInputChange(e, index) {
-    //     const newGuess = [...guess];
-    //     newGuess[index] = e.target.value;
-    //     setGuess(newGuess);
-    //     setError(false);
-    //     setMessage('');
-    // }
     function handleInputChange(e, index) {
         const newGuess = [...guess];
         const digit = e.target.value;
