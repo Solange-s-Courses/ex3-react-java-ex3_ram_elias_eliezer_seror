@@ -32,7 +32,7 @@ const GameBoard = ({ submitted }) => {
         }
         console.log(result); // Print the solution in the console
         //return result;
-        return "0000";
+        return "0123";
     }
 
     function handleNewGame() {
@@ -43,6 +43,8 @@ const GameBoard = ({ submitted }) => {
         setError(false);
         setGameOver(false);
         submitted = false;
+        console.log("gameOver:", gameOver); // Print the solution in the console
+
     }
 
     function handleGameRules() {
@@ -99,7 +101,7 @@ const GameBoard = ({ submitted }) => {
     return (
         <div className="container d-flex bg-info bg-opacity-25 justify-content-center">
             {gameOver ?
-                <GameOver score={history.length}/>
+                <GameOver score={history.length} handleNewGame={handleNewGame} />
                 :
                 <div className="row">
                     <div className="col d-flex justify-content-center mb-3">

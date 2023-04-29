@@ -43,7 +43,7 @@ const GameOver = ({ score, handleNewGame }) => {
     };
 
     const handlePlayAgain = () => {
-        //setSubmitted(false);
+        setSubmitted(false);
         setName('');
         handleNewGame(); // Call handleNewGame function
 
