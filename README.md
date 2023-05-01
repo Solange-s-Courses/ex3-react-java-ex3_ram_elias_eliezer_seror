@@ -5,7 +5,11 @@
 
 ## Explanations
 
-(Explain here your project)
+The game is called "Bulls and Cows" and the objective is to guess a 4-digit number combination. The digits can be in any order and cannot repeat. For each guess, the player receives feedback in the form of "bulls" and "cows". A "bull" indicates that a digit in the guess is in the correct position, while a "cow" indicates that a digit in the guess is in the wrong position. The player uses the feedback to refine their guesses and eventually guess the correct combination.
+
+In the implementation, we use React and useState to manage the game's state. We generate a random 4-digit solution using a helper function and use state to manage the player's guesses, the game history, and the game status (whether the game is over or not). We also use useEffect to generate a new solution whenever the game is reset. The player can input their guess and receive feedback by clicking the "Go!" button. If the player correctly guesses the solution, the game is won and a new game can be started.
+
+The game's high scores are managed by a Java servlet that communicates with the game server. When a player finishes a game and submit thier name, their score is sent to the servlet, which checks if the score is high enough to be added to the leaderboard. If it is, the servlet updates the leaderboard. The servlet sends the scores back to the game server.
 
 ## How to use this template
 This is the template for a project where front-end and back-end are separated.
