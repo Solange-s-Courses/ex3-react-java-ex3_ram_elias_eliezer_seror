@@ -76,7 +76,7 @@ public class ApiServlet extends HttpServlet {
             if (highScore == null) {
                 highScore = new HighScore(); // create a new instance if loading fails
             }
-            synchronized (ApiServlet.class) {
+            synchronized (HighScore.class) {
                 highScore.saveToFile(getServletContext().getRealPath(".") + "\\" + SCORES ,newScore );
             }
             response.setStatus(HttpServletResponse.SC_CREATED);
