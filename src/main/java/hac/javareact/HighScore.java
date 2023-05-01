@@ -1,48 +1,25 @@
 package hac.javareact;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class HighScore implements Serializable {
-    private static final long serialVersionUID = 1L;
 
-    private static final int MAX_SCORES = 10;
-    public List<Score> scores;
-
-    public HighScore() {
-        scores = new ArrayList<>();
-    }
-
-    public synchronized void addScore(Score score) {
-        System.out.println("I'm in add score");
-
-        for (Score s : scores) {
-            if (s.getUserName().equals(score.getUserName())) {
-                // Update the score for an existing user
-                s.setScore(Math.min(s.getScore(), score.getScore()));
-                return;
-            }
-        }
-        // Add a new score for a new user
-        scores.add(score);
-        Collections.sort(scores);
-        if (scores.size() > MAX_SCORES) {
-            scores.remove(scores.size() - 1);
-        }
-        for (Score s : scores) {
-            System.out.println(s.getUserName() + " : " + s.getScore());
-        }
-    }
-
-    public synchronized List<Score> getTopScores() {
-        return new ArrayList<>(scores);
-    }
-
+    /**
+     Saves a new score to a file and updates the user score in file if the user already exists.
+     The file is sorted in descending order and only the top 5 scores are saved.
+     @param fileName the name of the file to save the scores to.
+     @param newScore the new score to add or update in the file.
+     @throws IOException if an I/O error occurs while reading or writing to the file.
+     */
     public synchronized void saveToFile(String fileName, Score newScore) throws IOException {
         List<Score> scores;
         File file = new File(fileName);
 
+        // Read existing scores from file or create a new list if the file does not exist
         if (file.exists() && file.length() > 0) {
             // Read existing data from file
             try (FileInputStream fis = new FileInputStream(file);
@@ -50,11 +27,14 @@ public class HighScore implements Serializable {
                 scores = (List<Score>) ois.readObject();
             } catch (ClassNotFoundException e) {
                 throw new IOException("Error reading scores from file: " + e.getMessage());
+            } catch (IOException e) {
+                throw new IOException("Error reading scores from file: " + e.getMessage());
             }
         } else {
             // If the file doesn't exist or is empty, create a new list
             scores = new ArrayList<>();
         }
+
 
         // Add the new score to the list or update the existing score
         boolean updated = false;
@@ -75,43 +55,25 @@ public class HighScore implements Serializable {
         }
 
         // Sort the scores in descending order
-        scores.sort((s1, s2) -> s1.getScore() - s2.getScore());
-
-        // Remove duplicates
-        Set<String> uniqueNames = new HashSet<>();
-        List<Score> uniqueScores = new ArrayList<>();
-        for (Score score : scores) {
-            if (uniqueNames.add(score.getUserName())) {
-                uniqueScores.add(score);
-            }
-        }
+        scores.sort((s1, s2) -> s2.getScore() - s1.getScore());
 
         // Save only the top 5 scores
-        List<Score> topScores = uniqueScores.stream().limit(5).collect(Collectors.toList());
+        List<Score> topScores = scores.stream().limit(5).collect(Collectors.toList());
 
         // Write the top 5 scores back to the file
-        try (FileOutputStream fos = new FileOutputStream(file);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(Files.newOutputStream(Paths.get(fileName)))) {
             oos.writeObject(topScores);
         }
     }
 
-
-    // Helper method to get the index to add the new score
-    private int getIndexToAddScore(List<Score> scores, Score newScore) {
-        int index = 0;
-        for (int i = 0; i < scores.size(); i++) {
-            if (newScore.getScore() > scores.get(i).getScore()) {
-                index = i;
-                break;
-            } else {
-                index = i + 1;
-            }
-        }
-        return index;
-    }
+    /**
+     Loads high scores from a file.
+     @param fileName the name of the file to load the scores from.
+     @return a HighScore object containing the high scores.
+     @throws IOException if an I/O error occurs while reading from the file.
+     @throws ClassNotFoundException if the class of the serialized object cannot be found.
+     */
     public static synchronized HighScore loadFromFile(String fileName) throws IOException, ClassNotFoundException {
-        System.out.println("2");
         HighScore highScore = null;
         try {
             FileInputStream fis = new FileInputStream(fileName);
@@ -129,7 +91,6 @@ public class HighScore implements Serializable {
             System.err.println("Class not found: " + e.getMessage());
             e.printStackTrace();
         }
-        System.out.println("3");
         return highScore;
     }
 }

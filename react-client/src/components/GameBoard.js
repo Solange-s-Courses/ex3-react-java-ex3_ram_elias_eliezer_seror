@@ -14,11 +14,11 @@ const GameBoard = ({ submitted }) => {
     const [rules, setRules] = useState(false);
     const rulesMsg = 'The goal of the game is to guess a 4-digit number combination. The digits can be in any order and can not repeat For each guess, you will receive feedback in the form of "bulls" and "cows". A "bull" indicates that a digit in your guess is in the correct position, while a "cow" indicates that a digit in your guess is in the wrong position. Use the feedback to refine your guesses and eventually guess the correct combination.'
 
-
     useEffect(() => {
         setSolution(generateSolution());
     }, []);
 
+    // This function generates a 4-digit random number/color combination and returns it as a string
     function generateSolution() {
         // Generate a 4-digit random number/color combination
         const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -30,11 +30,11 @@ const GameBoard = ({ submitted }) => {
                 result += digit
             }
         }
-        console.log(result); // Print the solution in the console
-        //return result;
-        return "0123";
+        console.log('The solution is:' + result); // Print the solution in the console for the bodek
+        return result;
     }
 
+    // This function resets the game state to its initial values
     function handleNewGame() {
         setSolution(generateSolution());
         setGuess(['', '', '', '']);
@@ -43,14 +43,14 @@ const GameBoard = ({ submitted }) => {
         setError(false);
         setGameOver(false);
         submitted = false;
-        console.log("gameOver:", gameOver); // Print the solution in the console
-
     }
 
+    // This function toggles the display of the game rules message
     function handleGameRules() {
         setRules(!rules)
     }
 
+    // This function updates the guess state when a digit is entered in the input field
     function handleInputChange(e, index) {
         const newGuess = [...guess];
         const digit = e.target.value;
@@ -67,6 +67,7 @@ const GameBoard = ({ submitted }) => {
         setGuess(newGuess);
     }
 
+    // This function checks the current guess against the solution and updates the history state
     function checkGuess() {
         setError(false)
         for (let i = 0; i < guess.length; i++) {
@@ -94,20 +95,21 @@ const GameBoard = ({ submitted }) => {
         if (bulls === 4) {
             setSolution(generateSolution());
             setGameOver(true);
-            console.log('You won!');
         }
     }
 
     return (
-        <div className="container d-flex bg-info bg-opacity-25 justify-content-center">
+        <div className="container-fluid bg-info bg-opacity-25 justify-content-center" style={{width: '100vw', height: '300vh'}}>
             {gameOver ?
-                <GameOver score={history.length} handleNewGame={handleNewGame} />
+                <GameOver score={history.length} handleNewGame={handleNewGame} error={error} setError={setError} message={message} setMessage={setMessage} />
                 :
                 <div className="row">
                     <div className="col d-flex justify-content-center mb-3">
                         <img
                             src="https://cdn.akamai.steamstatic.com/steam/apps/2078210/capsule_616x353.jpg?t=1665514818"
-                            alt="Example image"/>
+                            alt="Example image"
+                            style={{width: '50vw', height: '20vw'}}
+                        />
                     </div>
                     <div className="row ">
                         <div className="col-6 mb-3 d-flex justify-content-center">
@@ -116,7 +118,11 @@ const GameBoard = ({ submitted }) => {
                         <div className="col-6 mb-3 d-flex justify-content-center">
                             <button className="btn btn-warning" onClick={handleGameRules}> Game rules</button>
                         </div>
-                        {rules && <div className="text-success mb-3">{rulesMsg}</div>}
+                        {rules &&
+                            <div className="col-9 mb-3 mx-auto justify-content-center">
+                                <div className="text-success mb-3">{rulesMsg}</div>
+                            </div>
+                        }
                     <div className="row d-flex justify-content-center ">
                         <div className="col-9 mb-3">
                             <Guess guess={guess}

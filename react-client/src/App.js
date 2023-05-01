@@ -8,6 +8,10 @@ function App() {
     const [gameOver, setGameOver] = useState(false);
     const [score, setScore] = useState(0);
 
+    /**
+     * function to handle game over include sent the username and score to the server
+     * @param score
+     */
     function handleGameOver(score) {
         setScore(score);
         // send score to backend
@@ -31,11 +35,12 @@ function App() {
             });
     }
 
+    /**
+     * function to handle play again button
+     */
     function handlePlayAgain() {
         setGameOver(false);
         setScore(0);
-        // hide high scores in GameOver component
-        document.getElementById('highScores').classList.add('d-none');
     }
 
     return (
